@@ -7,11 +7,16 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE);
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+mongoose.connect(process.env.DATABASE, {useNewUrlParser: true})
+.then(() => console.log('connecting to database successfull'))
+.catch((err) => console.log('could not connect to mongoDB', err));
+mongoose.set('useCreateIndex', true);
 
 // MODELS
 const {User} = require('./models/user');
@@ -26,6 +31,27 @@ const {admin} = require('./middleware/admin');
 //===============================
 //            PRODUCTS
 //===============================
+
+app.get('/api/product/articleId', (req, res) => {
+    let type = req.query.type;
+    let items = req.query.id;
+
+    if (type === "array") {
+        let ids = req.query.id.split(',');
+        items = [];
+        items = ids.map(item => {
+            return mongoose.Types.ObjectId(item);
+        })
+    }
+
+    Product
+        .find({'_id': {$in:items}})
+        .populate('brand')
+        .populate('wood')
+        .exec((err, docs) => {
+            return res.status(200).send(docs)
+        });
+});
 
 app.post('/api/product/article', auth, admin, (req, res) => {
     const product = new Product(req.body);
