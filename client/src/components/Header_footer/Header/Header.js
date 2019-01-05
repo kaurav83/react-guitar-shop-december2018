@@ -1,6 +1,69 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 class Header extends Component {
+
+    state = {
+        page: [
+            {
+                name: 'Home',
+                linkTo: '/',
+                public: true
+            },
+            {
+                name: 'Guitars',
+                linkTo: '/shop',
+                public: true
+            }
+        ],
+        user: [
+            {
+                name: 'My Cart',
+                linkTo: '/user/cart',
+                public: false
+            },
+            {
+                name: 'Log in',
+                linkTo: '/register_login',
+                public: true
+            },
+            {
+                name: 'Log out',
+                linkTo: '/user/logout',
+                public: false
+            }
+        ]
+    }
+
+    defaultLink = (item, index) => (
+        <Link to={item.linkTo} key={index}>
+            {item.name}
+        </Link>
+    )
+
+    showLinks = (type) => {
+        let list = [];
+
+        if (this.props.user.userData) {
+            type.forEach(item => {
+                if (!this.props.user.userData.isAuth){
+                    if (item.public === true){
+                        list.push(item);
+                    }
+                } else {
+                    if (item.name !== 'Log in'){
+                        list.push(item)
+                    }
+                }
+            });
+        }
+
+        return list.map((item, i) => {
+            return this.defaultLink(item, i);
+        });
+    }
+
     render() {
         return (
             <header className="header bck_b_light">
@@ -12,10 +75,10 @@ class Header extends Component {
                     </div>
                     <div className="right">
                         <div className="top">
-                            Links
+                            {this.showLinks(this.state.user)}
                         </div>
                         <div className="bottom">
-                            Links
+                            {this.showLinks(this.state.page)}
                         </div>
                     </div>
                 </div>
@@ -24,4 +87,10 @@ class Header extends Component {
     }
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps)(Header);
