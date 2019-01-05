@@ -4,12 +4,14 @@ import Home from './components/Home/Home';
 import Layout from './hoc/layout';
 import RegisterLogin from './components/Register_login'; 
 import Register from './components/Register_login/register';
+import UserDashboard from './components/User'
 
 const Routes = () => {
     return (
         <Layout>
             <Switch>
-                <Route exact path="/" component={Home} />
+                <Route path="/user/dashboard" exact component={UserDashboard} />
+                <Route path="/" exact component={Home} />
                 <Route path="/register_login" component={RegisterLogin} />
                 <Route path="/register" component={Register} />
             </Switch>
