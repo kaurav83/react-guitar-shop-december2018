@@ -4,7 +4,8 @@ import { USER_SERVER } from '../components/utils/misc';
 import {
     LOGIN_USER,
     REGISTER_USER,
-    AUTH_USER
+    AUTH_USER,
+    LOGOUT_USER
 } from './types';
 
 export const loginUser = (dataToSubmit) => {
@@ -35,3 +36,13 @@ export const auth = () => {
         payload: request
     };
 };
+
+export const logoutUser = () => {
+    const request = axios.get(`${USER_SERVER}/logout`)
+        .then(response => response.data);
+
+    return {
+        type: LOGOUT_USER,
+        payload: request
+    }
+}

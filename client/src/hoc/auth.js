@@ -12,7 +12,6 @@ export default function (ComposedClass, reload, adminRoute = null) {
         componentDidMount() {
             this.interval = setTimeout(() => {
                 this.props.dispatch(auth()).then(response => {
-                    console.log(response, 'res')
                     let user = this.props.user.userData;
 
                     if (!user.isAuth) {
