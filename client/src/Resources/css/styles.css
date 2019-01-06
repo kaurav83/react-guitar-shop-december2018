@@ -914,3 +914,7 @@ footer .business_nfo .nfo {
     left: 0;
     transform: translate(100%, -50%);
 }
+
+ul, li {
+    list-style-type: none;
+}
