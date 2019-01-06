@@ -894,3 +894,23 @@ footer .business_nfo .nfo {
     background-position: center center !important;
     border: 1px solid #eaeaea;
 }
+
+.slick-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 100;
+}
+
+.slick-prev {
+    right: 0;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+}
+
+.slick-next {
+    left: 0;
+    transform: translate(100%, -50%);
+}
