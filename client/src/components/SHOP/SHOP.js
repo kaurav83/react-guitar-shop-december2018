@@ -5,7 +5,8 @@ import {connect} from 'react-redux';
 import {getBrands, getWoods} from '../../actions/products_actions';
 
 import CollapseCheckBox from '../utils/COLLAPSECHECKBOX';
-import {FRETS} from '../utils/FIXED_CATEGORIES';
+import {FRETS, PRICE} from '../utils/FIXED_CATEGORIES';
+import CollapseRadio from '../utils/COLLAPSERADIO';
 
 class Shop extends Component {
 
@@ -26,9 +27,27 @@ class Shop extends Component {
         this.props.dispatch(getWoods());
     }
 
+    handlePrice = (value) => {
+        const data = PRICE;
+        let array = [];
+
+        for(let key in data){
+            if(data[key]._id === parseInt(value,10)){
+                array = data[key].array
+            }
+        }
+        return array;
+    }
+
     handleFilters = (filters, category) => {
         const newFilters = {...this.state.filters}
         newFilters[category] = filters;
+
+        if(category === "price"){
+            console.log(filters)
+            let priceValues = this.handlePrice(filters);
+            newFilters[category] = priceValues
+        }
 
         this.setState({
             filters: newFilters
@@ -61,6 +80,12 @@ class Shop extends Component {
                                 title="Wood"
                                 list={products.woods}
                                 handleFilters={(filters) => this.handleFilters(filters, 'wood') }
+                            />
+
+                            <CollapseRadio 
+                                title="Price"
+                                list={PRICE}
+                                handleFilters={(filters) => this.handleFilters(filters, 'price') }
                             />
                         </div>
                         <div className="right">
