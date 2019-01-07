@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class CollapseCheckBox extends Component {
 
@@ -6,6 +6,23 @@ class CollapseCheckBox extends Component {
         checked: []
     }
 
+    handleToggle = value => () => {
+        const {checked} = this.state;
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+
+        if (currentIndex === -1){
+            newChecked.push(value)
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+
+        this.setState({
+            checked: newChecked
+        }, () => {
+            this.props.handleFilters(newChecked)
+        })
+    }
   
     render() {
         return (
@@ -18,18 +35,22 @@ class CollapseCheckBox extends Component {
                     className="collapse_title" 
                 >
                    <div>{this.props.title}</div>
-
+                    {/* СПИСОК ЧЕКБОКСОВ 1 */}
                     <ul>
                         {
                             this.props.list ?
                                 this.props.list.map((value) => {
-                                    console.log(value)
                                     return (
                                         <li 
                                             style={{display: "flex"}}
                                             key={value._id}
                                         >
-                                            <input type="checkbox" id={value._id}  />
+                                            <input 
+                                                type="checkbox" 
+                                                id={value._id}
+                                                onChange={this.handleToggle(value._id)} 
+                                                checked={this.state.checked.indexOf(value._id) !== -1} 
+                                            />
                                             <label htmlFor={value._id} >{value.name}</label>
                                         </li>
                                     )

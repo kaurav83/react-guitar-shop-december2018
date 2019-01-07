@@ -5,19 +5,39 @@ import {connect} from 'react-redux';
 import {getBrands, getWoods} from '../../actions/products_actions';
 
 import CollapseCheckBox from '../utils/COLLAPSECHECKBOX';
+import {FRETS} from '../utils/FIXED_CATEGORIES';
 
 class Shop extends Component {
+
+    state={
+        grid: "",
+        limit: 6,
+        skip: 0,
+        filters: {
+            brand: [],
+            frets: [],
+            wood: [],
+            price: []
+        }
+    }
 
     componentDidMount() {
         this.props.dispatch(getBrands());
         this.props.dispatch(getWoods());
     }
 
-    handleFilters = () => {
-        
+    handleFilters = (filters, category) => {
+        const newFilters = {...this.state.filters}
+        newFilters[category] = filters;
+
+        this.setState({
+            filters: newFilters
+        })
     }
 
     render() {
+
+        console.log(this.state.filters)
         const products = this.props.products;
         return (
             <div>
@@ -32,8 +52,16 @@ class Shop extends Component {
                                 list={products.brands}
                                 handleFilters={(filters) => this.handleFilters(filters, 'brand') }
                             />
-                            
-                            
+                            <CollapseCheckBox 
+                                title="Frets"
+                                list={FRETS}
+                                handleFilters={(filters) => this.handleFilters(filters, 'frets') }
+                            />
+                            <CollapseCheckBox 
+                                title="Wood"
+                                list={products.woods}
+                                handleFilters={(filters) => this.handleFilters(filters, 'wood') }
+                            />
                         </div>
                         <div className="right">
                             right
